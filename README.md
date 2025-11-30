@@ -70,7 +70,7 @@ docker compose up
 
 ## Api documentation
 
-Swagger: http://{domain_name}/api/docs
+Swagger: http://localhost:4000/api/docs
 
 ## Tech used
 
