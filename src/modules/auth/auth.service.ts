@@ -1,14 +1,14 @@
 // external imports
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import Redis from 'ioredis';
+// import { InjectRedis } from '@nestjs-modules/ioredis';
+// import Redis from 'ioredis';
 
 //internal imports
 import appConfig from '../../config/app.config';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserRepository } from '../../common/repository/user/user.repository';
-import { MailService } from '../../mail/mail.service';
+// import { MailService } from '../../mail/mail.service';
 import { UcodeRepository } from '../../common/repository/ucode/ucode.repository';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SojebStorage } from '../../common/lib/Disk/SojebStorage';
@@ -21,8 +21,8 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private prisma: PrismaService,
-    private mailService: MailService,
-    @InjectRedis() private readonly redis: Redis,
+    // private mailService: MailService,
+    // @InjectRedis() private readonly redis: Redis,
   ) {}
 
   async me(userId: string) {
@@ -84,9 +84,9 @@ export class AuthService {
   ) {
     try {
       const data: any = {};
-      if (updateUserDto.name) {
-        data.name = updateUserDto.name;
-      }
+      // if (updateUserDto.name) {
+      //   data.name = updateUserDto.name;
+      // }
       if (updateUserDto.first_name) {
         data.first_name = updateUserDto.first_name;
       }
@@ -232,12 +232,12 @@ export class AuthService {
       const user = await UserRepository.getUserDetails(userId);
 
       // store refreshToken
-      await this.redis.set(
-        `refresh_token:${user.id}`,
-        refreshToken,
-        'EX',
-        60 * 60 * 24 * 7, // 7 days in seconds
-      );
+      // await this.redis.set(
+      //   `refresh_token:${user.id}`,
+      //   refreshToken,
+      //   'EX',
+      //   60 * 60 * 24 * 7, // 7 days in seconds
+      // );
 
       return {
         success: true,
@@ -259,14 +259,14 @@ export class AuthService {
 
   async refreshToken(user_id: string, refreshToken: string) {
     try {
-      const storedToken = await this.redis.get(`refresh_token:${user_id}`);
+      // const storedToken = await this.redis.get(`refresh_token:${user_id}`);
 
-      if (!storedToken || storedToken != refreshToken) {
-        return {
-          success: false,
-          message: 'Refresh token is required',
-        };
-      }
+      // if (!storedToken || storedToken != refreshToken) {
+      //   return {
+      //     success: false,
+      //     message: 'Refresh token is required',
+      //   };
+      // }
 
       if (!user_id) {
         return {
@@ -303,15 +303,15 @@ export class AuthService {
 
   async revokeRefreshToken(user_id: string) {
     try {
-      const storedToken = await this.redis.get(`refresh_token:${user_id}`);
-      if (!storedToken) {
-        return {
-          success: false,
-          message: 'Refresh token not found',
-        };
-      }
+      // const storedToken = await this.redis.get(`refresh_token:${user_id}`);
+      // if (!storedToken) {
+      //   return {
+      //     success: false,
+      //     message: 'Refresh token not found',
+      //   };
+      // }
 
-      await this.redis.del(`refresh_token:${user_id}`);
+      // await this.redis.del(`refresh_token:${user_id}`);
 
       return {
         success: true,
@@ -371,22 +371,22 @@ export class AuthService {
       }
 
       // create stripe customer account
-      const stripeCustomer = await StripePayment.createCustomer({
-        user_id: user.data.id,
-        email: email,
-        name: name,
-      });
+      // const stripeCustomer = await StripePayment.createCustomer({
+      //   user_id: user.data.id,
+      //   email: email,
+      //   name: name,
+      // });
 
-      if (stripeCustomer) {
-        await this.prisma.user.update({
-          where: {
-            id: user.data.id,
-          },
-          data: {
-            billing_id: stripeCustomer.id,
-          },
-        });
-      }
+      // if (stripeCustomer) {
+      //   await this.prisma.user.update({
+      //     where: {
+      //       id: user.data.id,
+      //     },
+      //     data: {
+      //       billing_id: stripeCustomer.id,
+      //     },
+      //   });
+      // }
 
       // ----------------------------------------------------
       // // create otp code
@@ -416,16 +416,17 @@ export class AuthService {
       });
 
       // Send verification email with token
-      await this.mailService.sendVerificationLink({
-        email,
-        name: email,
-        token: token.token,
-        type: type,
-      });
+      // await this.mailService.sendVerificationLink({
+      //   email,
+      //   name: email,
+      //   token: token.token,
+      //   type: type,
+      // });
 
       return {
         success: true,
-        message: 'We have sent a verification link to your email',
+        // message: 'We have sent a verification link to your email',
+        message: 'User registered successfully',
       };
     } catch (error) {
       return {
@@ -448,11 +449,11 @@ export class AuthService {
           isOtp: true,
         });
 
-        await this.mailService.sendOtpCodeToEmail({
-          email: email,
-          name: user.name,
-          otp: token,
-        });
+        // await this.mailService.sendOtpCodeToEmail({
+        //   email: email,
+        //   name: user.name,
+        //   otp: token,
+        // });
 
         return {
           success: true,
@@ -586,11 +587,11 @@ export class AuthService {
         });
 
         // send otp code to email
-        await this.mailService.sendOtpCodeToEmail({
-          email: email,
-          name: user.name,
-          otp: token,
-        });
+        // await this.mailService.sendOtpCodeToEmail({
+        //   email: email,
+        //   name: user.name,
+        //   otp: token,
+        // });
 
         return {
           success: true,
@@ -659,11 +660,11 @@ export class AuthService {
           email: email,
         });
 
-        await this.mailService.sendOtpCodeToEmail({
-          email: email,
-          name: email,
-          otp: token,
-        });
+        // await this.mailService.sendOtpCodeToEmail({
+        //   email: email,
+        //   name: email,
+        //   otp: token,
+        // });
 
         return {
           success: true,

@@ -31,11 +31,11 @@ export default () => ({
     url: process.env.DATABASE_URL,
   },
 
-  redis: {
-    host: process.env.REDIS_HOST,
-    password: process.env.REDIS_PASSWORD,
-    port: process.env.REDIS_PORT,
-  },
+  // redis: {
+  //   host: process.env.REDIS_HOST,
+  //   password: process.env.REDIS_PASSWORD,
+  //   port: process.env.REDIS_PORT,
+  // },
 
   security: {
     salt: 10,

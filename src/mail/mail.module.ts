@@ -1,7 +1,7 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Global, Module } from '@nestjs/common';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { MailService } from './mail.service';
+// import { MailService } from './mail.service';
 import appConfig from '../config/app.config';
 import { BullModule } from '@nestjs/bullmq';
 import { MailProcessor } from './processors/mail.processor';
@@ -34,11 +34,11 @@ import { MailProcessor } from './processors/mail.processor';
         },
       },
     }),
-    BullModule.registerQueue({
-      name: 'mail-queue',
-    }),
+    // BullModule.registerQueue({
+    //   name: 'mail-queue',
+    // }),
   ],
-  providers: [MailService, MailProcessor],
-  exports: [MailService],
+  // providers: [MailService, MailProcessor],
+  // exports: [MailService],
 })
 export class MailModule {}

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { OnModuleInit } from '@nestjs/common';
-import Redis from 'ioredis';
+// import Redis from 'ioredis';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -30,8 +30,8 @@ export class NotificationGateway
   @WebSocketServer()
   server: Server;
 
-  private redisPubClient: Redis;
-  private redisSubClient: Redis;
+  // private redisPubClient: Redis;
+  // private redisSubClient: Redis;
 
   // Map to store connected clients
   private clients = new Map<string, string>(); // userId -> socketId
@@ -39,22 +39,22 @@ export class NotificationGateway
   constructor(private readonly notificationService: NotificationService) {}
 
   onModuleInit() {
-    this.redisPubClient = new Redis({
-      host: appConfig().redis.host,
-      port: Number(appConfig().redis.port),
-      password: appConfig().redis.password,
-    });
+    // this.redisPubClient = new Redis({
+    //   host: appConfig().redis.host,
+    //   port: Number(appConfig().redis.port),
+    //   password: appConfig().redis.password,
+    // });
 
-    this.redisSubClient = new Redis({
-      host: appConfig().redis.host,
-      port: Number(appConfig().redis.port),
-      password: appConfig().redis.password,
-    });
+    // this.redisSubClient = new Redis({
+    //   host: appConfig().redis.host,
+    //   port: Number(appConfig().redis.port),
+    //   password: appConfig().redis.password,
+    // });
 
-    this.redisSubClient.subscribe('notification', (err, message: string) => {
-      const data = JSON.parse(message);
-      this.server.emit('receiveNotification', data);
-    });
+    // this.redisSubClient.subscribe('notification', (err, message: string) => {
+    //   const data = JSON.parse(message);
+    //   this.server.emit('receiveNotification', data);
+    // });
   }
 
   afterInit(server: Server) {
@@ -96,7 +96,7 @@ export class NotificationGateway
     // Emit notification to specific client
     const targetSocketId = this.clients.get(data.userId);
     if (targetSocketId) {
-      await this.redisPubClient.publish('notification', JSON.stringify(data));
+      // await this.redisPubClient.publish('notification', JSON.stringify(data));
 
       // console.log(`Notification sent to user ${data.userId}`);
     } else {

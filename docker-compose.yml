@@ -19,8 +19,8 @@ services:
       # for use the "postgres" "service" name
       - DATABASE_URL=postgresql://postgres:root@postgres/backend
 
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      # - REDIS_HOST=redis
+      # - REDIS_PORT=6379
 
       - TURN_SERVER=turn:turnserver:3478
       - TURN_USERNAME=webrtc
@@ -30,7 +30,7 @@ services:
       - /usr/src/app/node_modules
     depends_on:
       - postgres
-      - redis
+      # - redis
     command: yarn start:dev-swc
 
   postgres:
@@ -45,11 +45,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"
+  # redis:
+  #   image: redis:latest
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
 
   turnserver:
     image: coturn/coturn

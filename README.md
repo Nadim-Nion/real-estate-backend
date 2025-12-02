@@ -1,3 +1,17 @@
+# Credentials
+
+- User
+```bash
+email: cricketnion1234@gmail.com
+password: 12345678
+```
+
+-Admin 
+```bash
+email: nadimmahmud.webdev@gmail.com
+password: 12345678
+```
+
 # Description
 
 backend created using nestjs
