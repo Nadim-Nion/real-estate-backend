@@ -434,3 +434,37 @@ model UserSetting {
 //   tenant    Organization? @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
 //   @@map("posts")
 // }
+
+model Category {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  name String
+  slug String @unique
+
+  properties Property[]
+
+  @@map("categories")
+}
+
+model Property {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  name        String
+  slug        String  @unique
+  description String
+  location    String
+  price       Float
+  bedrooms    Int
+  bathrooms   Int
+  aminities   String
+  status      Boolean @default(false) // True for active, False for inactive
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  @@map("properties")
+}

@@ -1,20 +1,19 @@
 // external imports
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 // import { InjectRedis } from '@nestjs-modules/ioredis';
 // import Redis from 'ioredis';
 
 //internal imports
+import { UserRepository } from '../../common/repository/user/user.repository';
 import appConfig from '../../config/app.config';
 import { PrismaService } from '../../prisma/prisma.service';
-import { UserRepository } from '../../common/repository/user/user.repository';
 // import { MailService } from '../../mail/mail.service';
+import { DateHelper } from '../../common/helper/date.helper';
+import { StringHelper } from '../../common/helper/string.helper';
+import { SojebStorage } from '../../common/lib/Disk/SojebStorage';
 import { UcodeRepository } from '../../common/repository/ucode/ucode.repository';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { SojebStorage } from '../../common/lib/Disk/SojebStorage';
-import { DateHelper } from '../../common/helper/date.helper';
-import { StripePayment } from '../../common/lib/Payment/stripe/StripePayment';
-import { StringHelper } from '../../common/helper/string.helper';
 
 @Injectable()
 export class AuthService {
@@ -241,6 +240,7 @@ export class AuthService {
 
       return {
         success: true,
+        statusCode: HttpStatus.OK,
         message: 'Logged in successfully',
         authorization: {
           type: 'bearer',
@@ -425,6 +425,7 @@ export class AuthService {
 
       return {
         success: true,
+        statusCode: HttpStatus.CREATED,
         // message: 'We have sent a verification link to your email',
         message: 'User registered successfully',
       };
