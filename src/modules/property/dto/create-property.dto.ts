@@ -77,4 +77,12 @@ export class CreatePropertyDto {
   @IsBoolean()
   @IsOptional()
   status?: boolean;
+
+  @ApiProperty({
+    example: '1',
+    description: 'ID of the category the property belongs to',
+  })
+  @IsString()
+  @IsNotEmpty()
+  category_id: string;
 }
