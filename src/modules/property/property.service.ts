@@ -95,12 +95,56 @@ export class PropertyService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} property`;
+  async findOneProperty(id: string) {
+    try {
+      const result = await this.prisma.property.findUnique({
+        where: { id },
+      });
+
+      return {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: 'Property retrieved successfully',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error?.message || 'Failed to create property',
+      };
+    }
   }
 
-  update(id: number, updatePropertyDto: UpdatePropertyDto) {
-    return `This action updates a #${id} property`;
+  async update(id: string, payload: UpdatePropertyDto, user: any) {
+    try {
+      // Check only admin update property
+      const isAdmin = await UserRepository.getUserDetails(user.userId);
+
+      if (!isAdmin || isAdmin.type !== 'admin') {
+        throw new ConflictException('Only admin can update property');
+      }
+
+      const result = await this.prisma.property.update({
+        where: { id },
+        data: {
+          ...payload,
+        },
+      });
+
+      return {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: 'Property updated successfully',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error?.message || 'Failed to create property',
+      };
+    }
   }
 
   remove(id: number) {

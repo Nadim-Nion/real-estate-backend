@@ -56,17 +56,39 @@ export class PropertyController {
     }
   }
 
+  @ApiOperation({ summary: 'Get a property by ID' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.propertyService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    try {
+      return await this.propertyService.findOneProperty(id);
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error?.message || 'Something went wrong',
+      };
+    }
   }
 
+  @ApiOperation({ summary: 'Update a property by ID' })
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
-    @Body() updatePropertyDto: UpdatePropertyDto,
+    @Body() dto: UpdatePropertyDto,
+    @Req() req: Request,
   ) {
-    return this.propertyService.update(+id, updatePropertyDto);
+    try {
+      const user = req.user;
+
+      return await this.propertyService.update(id, dto, user);
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error?.message || 'Something went wrong',
+      };
+    }
   }
 
   @Delete(':id')
