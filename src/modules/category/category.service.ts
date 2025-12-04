@@ -1,5 +1,6 @@
 import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { getPagination } from 'src/utils/pagination';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
@@ -15,6 +16,10 @@ export class CategoryService {
           email: user.email,
         },
       });
+      console.log(
+        '🚀 ~ CategoryService ~ createCategory ~ isUserExists:',
+        isUserExists,
+      );
 
       // Check if the user is authorized to create a category
       if (!isUserExists || isUserExists.type !== 'admin') {
@@ -47,7 +52,7 @@ export class CategoryService {
         data: result,
       };
     } catch (error) {
-      console.log("error in category,service ln-50:", error)
+      console.log('error in category,service ln-50:', error);
       return {
         success: false,
         statusCode: HttpStatus.BAD_REQUEST,
@@ -56,8 +61,46 @@ export class CategoryService {
     }
   }
 
-  findAll() {
-    return `This action returns all category`;
+  async findAll(page: number, limit: number) {
+    try {
+      // // Implement pagination
+      // const result = await this.prisma.category.findMany({
+      //   skip: (page - 1) * limit,
+      //   take: limit,
+      // });
+
+      // // Count the records in the table
+      // const totalCount = await this.prisma.category.count();
+
+      // // Count Total pages
+      // const totalPages = Math.ceil(totalCount / limit);
+
+      // Using utility function for pagination
+      const { result, totalCount, totalPages } = await getPagination(
+        this.prisma.category,
+        page,
+        limit,
+      );
+
+      return {
+        success: true,
+        statusCode: HttpStatus.CREATED,
+        message: 'All Categories retrieved successfully',
+        metaData: {
+          totalCount,
+          totalPages,
+          currentPage: page,
+          limit,
+        },
+        data: result,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error?.message || 'Failed to create category',
+      };
+    }
   }
 
   findOne(id: number) {
