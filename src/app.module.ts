@@ -21,6 +21,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { CategoryModule } from './modules/category/category.module';
+import { PropertyModule } from './modules/property/property.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { CategoryModule } from './modules/category/category.module';
     ChatModule,
     PaymentModule,
     CategoryModule,
+    PropertyModule,
   ],
   controllers: [AppController],
   providers: [

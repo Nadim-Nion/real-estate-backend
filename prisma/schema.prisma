@@ -82,6 +82,7 @@ model User {
   roles                Role[]
   role_users           RoleUser[]
   payment_transactions PaymentTransaction[]
+  properties           Property[]
 
   @@map("users")
 }
@@ -465,6 +466,9 @@ model Property {
 
   category_id String
   category    Category @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("properties")
 }
