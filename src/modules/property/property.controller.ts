@@ -91,8 +91,19 @@ export class PropertyController {
     }
   }
 
+  @ApiOperation({ summary: 'Delete a property by ID' })
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.propertyService.remove(+id);
+  async remove(@Param('id') id: string,  @Req() req: Request,) {
+    try {
+       const user = req.user;
+      return await this.propertyService.remove(id, user);
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error?.message || 'Something went wrong',
+      };
+    }
   }
 }

@@ -147,7 +147,31 @@ export class PropertyService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} property`;
+  async remove(id: string, user: any) {
+    try {
+      // Check only admin delete property
+      const isAdmin = await UserRepository.getUserDetails(user.userId);
+
+      if (!isAdmin || isAdmin.type !== 'admin') {
+        throw new ConflictException('Only admin can delete property');
+      }
+
+      const result = await this.prisma.property.delete({
+        where: { id },
+      });
+
+      return {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: 'Property deleted successfully',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: error?.message || 'Failed to create property',
+      };
+    }
   }
 }
