@@ -1,16 +1,22 @@
 # Credentials
 
 - User
+
 ```bash
 email: cricketnion1234@gmail.com
 password: 12345678
 ```
 
--Admin 
+-Admin
+
 ```bash
 email: nadimmahmud.webdev@gmail.com
 password: 12345678
 ```
+
+# Resources
+
+[Loom Video](https://www.loom.com/share/35c6b9ff81d74395ae494043949f5f7f)
 
 # Description
 
