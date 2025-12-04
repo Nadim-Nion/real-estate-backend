@@ -2,7 +2,6 @@ import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { getPagination } from 'src/utils/pagination';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -61,7 +60,7 @@ export class CategoryService {
     }
   }
 
-  async findAll(page: number, limit: number) {
+  async findAllCategories(page: number, limit: number) {
     try {
       // // Implement pagination
       // const result = await this.prisma.category.findMany({
@@ -101,17 +100,5 @@ export class CategoryService {
         message: error?.message || 'Failed to create category',
       };
     }
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
-
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} category`;
   }
 }

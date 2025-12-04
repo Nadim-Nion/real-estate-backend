@@ -48,7 +48,7 @@ export class CategoryController {
     try {
       const page = parseInt(query.page) || 1;
       const limit = parseInt(query.limit) || 10;
-      return await this.categoryService.findAll(page, limit);
+      return await this.categoryService.findAllCategories(page, limit);
     } catch (error) {
       return {
         success: false,
@@ -56,23 +56,5 @@ export class CategoryController {
         message: error?.message || 'Something went wrong',
       };
     }
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
-  ) {
-    return this.categoryService.update(+id, updateCategoryDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
   }
 }
